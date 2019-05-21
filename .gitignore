@@ -56,3 +56,10 @@ Temporary Items
 *.lst
 *.map
 *.size
+
+*creator.user
+*elf.launch
+.directory
+*language.settings.xml
+*core.prefs
+*device.prefs
