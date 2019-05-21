@@ -27,26 +27,11 @@
 
 #include <stm32f10x.h>
 #include <stdbool.h>
+#include "delay.h"
 #include "usb.h"
 #include "config.h"
 #include "hid.h"
 #include "led.h"
-
-/* Bootloader size */
-#ifndef BOOTLOADER_SIZE
-#define BOOTLOADER_SIZE			(2 * 1024)
-#endif
-
-#ifndef SRAM_SIZE
-/* SRAM size */
-#define SRAM_SIZE			(20 * 1024)
-#endif
-
-/* SRAM end (bottom of stack) */
-#define SRAM_END			(SRAM_BASE + SRAM_SIZE)
-
-/* HID Bootloader takes 2 kb flash. */
-#define USER_PROGRAM			(FLASH_BASE + BOOTLOADER_SIZE)
 
 /* Initial stack pointer index in vector table*/
 #define INITIAL_MSP			0
@@ -132,11 +117,11 @@ static void set_sysclock_to_72_mhz(void)
 	SET_BIT(FLASH->ACR, FLASH_ACR_PRFTBE | FLASH_ACR_LATENCY_2);
 
 	/* SYSCLK = PCLK2 = HCLK */
-	/* PCLK1 = HCLK / 1 */
+	/* PCLK1 = HCLK / 2 */
 	/* PLLCLK = HSE * 9 = 72 MHz */
 	SET_BIT(RCC->CFGR,
 		RCC_CFGR_HPRE_DIV1 | RCC_CFGR_PPRE2_DIV1 | RCC_CFGR_PPRE1_DIV2 |
-		RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL9);
+		RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL9 | RCC_CFGR_PLLXTPRE_HSE_Div2);
 
 	/* Enable PLL */
 	SET_BIT(RCC->CR, RCC_CR_PLLON);
@@ -196,8 +181,7 @@ void Reset_Handler(void)
 	 *    registers from the Arduino IDE
 	 * then enter HID bootloader...
 	 */
-	if (1 || (magic_word == 0x424C) ||
-		READ_BIT(GPIOB->IDR, GPIO_IDR_IDR2) ||
+	if ((magic_word == 0x424C) ||
 		(check_user_code(USER_PROGRAM) == false)) {
 		if (magic_word == 0x424C) {
 
@@ -212,7 +196,7 @@ void Reset_Handler(void)
 		}
 		USB_Init();
 		while (check_flash_complete() == false) {
-			delay(400L);
+			delay(512);
 		};
 
 		/* Reset the USB */

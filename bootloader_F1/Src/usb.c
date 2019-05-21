@@ -72,6 +72,7 @@ void USB_SendData(uint8_t endpoint, uint16_t *data, uint16_t length)
 	if (endpoint > 0 && !DeviceConfigured) {
 		return;
 	}
+
 	RxTxBuffer[endpoint].TXL = length;
 	RxTxBuffer[endpoint].TXB = data;
 	USB_Buffer2PMA(endpoint);

@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-c -Wall
+CFLAGS=-c -Wall -g -Og
 LDFLAGS=
 SOURCES=main.c
 INCLUDE_DIRS=-I .

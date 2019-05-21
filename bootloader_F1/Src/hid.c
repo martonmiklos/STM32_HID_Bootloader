@@ -37,7 +37,7 @@
 #define FLASH_BASE_ADDRESS	0x08000000
 
 /* This should be the last page taken by the bootloader */
-#define MIN_PAGE		2
+#define MIN_PAGE		(BOOTLOADER_SIZE / 1024)
 
 /* Maximum packet size */
 #define MAX_PACKET_SIZE		8

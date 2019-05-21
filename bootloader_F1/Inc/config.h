@@ -1,6 +1,8 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
+#include "stm32f10x.h"
+
 #if defined TARGET_MAPLE_MINI
 	#define LED1_CLOCK		RCC_APB2ENR_IOPBEN
 	#define LED1_BIT_0		//CLEAR_BIT(GPIOB->CRL, GPIO_CRL_CNF1_0)
@@ -218,5 +220,21 @@
 #ifndef DISC_HIGH
 #define DISC_HIGH
 #endif
+
+/* Bootloader size */
+#ifndef BOOTLOADER_SIZE
+#define BOOTLOADER_SIZE         (2 * 1024)
+#endif
+
+#ifndef SRAM_SIZE
+/* SRAM size */
+#define SRAM_SIZE           (20 * 1024)
+#endif
+
+/* SRAM end (bottom of stack) */
+#define SRAM_END            (SRAM_BASE + SRAM_SIZE)
+
+/* HID Bootloader takes 2 kb flash. */
+#define USER_PROGRAM            (FLASH_BASE + BOOTLOADER_SIZE)
 
 #endif
