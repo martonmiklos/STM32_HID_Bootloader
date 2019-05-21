@@ -1,0 +1,7 @@
+hid-libusb.c
+hid-mac.c
+hid-win.c
+hidapi.h
+main.c
+rs232.c
+rs232.h
