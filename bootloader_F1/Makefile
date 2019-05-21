@@ -52,12 +52,14 @@ GDB = $(PREFIX)gdb
 
 ECHO = @echo
 CP = cp
-MKDIR = mkdir
+MKDIR = mkdir -p
 RM = rm
 RMDIR = rmdir
 
 BUILD_DIR = build
 BIN_DIR = bootloader_only_binaries
+
+.NOTPARALLEL:
 
 program: $(BUILD_DIR)/$(TARGET).hex
 	$(FLASH) write $(BUILD_DIR)/$(TARGET).bin 0x8000000
@@ -78,6 +80,7 @@ generic-pb7: $(SRCS) clean gccversion build_generic-pb7 copy_generic-pb7 info si
 generic-pb0: $(SRCS) clean gccversion build_generic-pb0 copy_generic-pb0 info size
 generic-pb12: $(SRCS) clean gccversion build_generic-pb12 copy_generic-pb12 info size
 mini-stm32v3: $(SRCS) clean gccversion build_mini-stm32v3 copy_mini-stm32v3 info size
+xlineusb: $(SRCS) clean gccversion build_xlineusb info size
 
 build_maple-mini: TARGETFLAGS= -DTARGET_MAPLE_MINI
 build_maple-mini: LINKER_SCRIPT=STM32F103CBT6.ld
@@ -169,7 +172,15 @@ build_mini-stm32v3: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).bin
 copy_mini-stm32v3: $(BIN_DIR)
 	$(ECHO) "COPY    $(BIN_DIR)/hid_mini-stm32v3.bin"
 	$(Q)$(CP) $(BUILD_DIR)/$(TARGET).bin $(BIN_DIR)/hid_mini-stm32v3.bin
-  
+	
+build_xlineusb: TARGETFLAGS= -DTARGET_XLINEUSB
+build_xlineusb: LINKER_SCRIPT=STM32F103T6U6.ld
+build_xlineusb: DEVICE = STM32F10X_LD
+build_xlineusb: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).bin
+copy_xlineusb: $(BIN_DIR)
+	$(ECHO) "COPY    $(BIN_DIR)/xlineusb_bootloader.bin"
+	$(Q)$(CP) $(BUILD_DIR)/$(TARGET).bin $(BIN_DIR)/xlineusb_bootloader.bin
+	
 $(BUILD_DIR)/$(TARGET).elf: $(OBJS)
 	$(ECHO) "LD      $@"
 	$(Q)$(CC) $(LDFLAGS) $(CFLAGS) $(OBJS) -o "$@"
@@ -218,3 +229,4 @@ clean:
 	$(Q)$(RM) -f $(BUILD_DIR)/$(TARGET).map
 	$(Q)$(RM) -f $(OBJS)
 	-$(Q)$(RMDIR) $(BUILD_DIR)
+

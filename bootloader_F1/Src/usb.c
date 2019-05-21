@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include "delay.h"
 #include "usb.h"
 #include "hid.h"
 
@@ -111,8 +112,18 @@ void USB_Init(void)
 		RxTxBuffer[i].RXL = RxTxBuffer[i].TXL = 0;
 	}
 
+    /* PA12: General purpose Input Pushpull */
+    SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPAEN);
+    WRITE_REG(GPIOA->BRR, GPIO_BRR_BR12);
+
+    MODIFY_REG(GPIOA->CRH,
+            GPIO_CRH_CNF12 | GPIO_CRH_MODE12,
+            GPIO_CRH_CNF12_0 | GPIO_CRH_MODE12_1);
+
+    // pull low D+ for 150 ms
+    delay(480000);
+
 	/* PA12: General purpose Input Float */
-	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPAEN);
 	MODIFY_REG(GPIOA->CRH,
 		GPIO_CRH_CNF12 | GPIO_CRH_MODE12,
 		GPIO_CRH_CNF12_0);

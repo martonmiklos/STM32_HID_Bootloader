@@ -33,10 +33,14 @@
 #include "led.h"
 
 /* Bootloader size */
+#ifndef BOOTLOADER_SIZE
 #define BOOTLOADER_SIZE			(2 * 1024)
+#endif
 
+#ifndef SRAM_SIZE
 /* SRAM size */
 #define SRAM_SIZE			(20 * 1024)
+#endif
 
 /* SRAM end (bottom of stack) */
 #define SRAM_END			(SRAM_BASE + SRAM_SIZE)
@@ -69,13 +73,6 @@ uint32_t *VectorTable[] __attribute__((section(".isr_vector"))) = {
 	(uint32_t *) Reset_Handler
 };
 
-static void delay(uint32_t timeout)
-{
-	for (uint32_t i = 0; i < timeout; i++) {
-		__NOP();
-	}
-}
-
 static bool check_flash_complete(void)
 {
 	if (UploadFinished == true) {
@@ -83,9 +80,9 @@ static bool check_flash_complete(void)
 	}
 	if (UploadStarted == false) {
 		LED1_ON;
-		delay(200000L);
+		delay(2000000L);
 		LED1_OFF;
-		delay(200000L);
+		delay(2000000L);
 	}
 	return false;
 }
@@ -135,7 +132,7 @@ static void set_sysclock_to_72_mhz(void)
 	SET_BIT(FLASH->ACR, FLASH_ACR_PRFTBE | FLASH_ACR_LATENCY_2);
 
 	/* SYSCLK = PCLK2 = HCLK */
-	/* PCLK1 = HCLK / 2 */
+	/* PCLK1 = HCLK / 1 */
 	/* PLLCLK = HSE * 9 = 72 MHz */
 	SET_BIT(RCC->CFGR,
 		RCC_CFGR_HPRE_DIV1 | RCC_CFGR_PPRE2_DIV1 | RCC_CFGR_PPRE1_DIV2 |
@@ -199,7 +196,7 @@ void Reset_Handler(void)
 	 *    registers from the Arduino IDE
 	 * then enter HID bootloader...
 	 */
-	if ((magic_word == 0x424C) ||
+	if (1 || (magic_word == 0x424C) ||
 		READ_BIT(GPIOB->IDR, GPIO_IDR_IDR2) ||
 		(check_user_code(USER_PROGRAM) == false)) {
 		if (magic_word == 0x424C) {
@@ -232,8 +229,7 @@ void Reset_Handler(void)
 	LED2_ON;
 
 	/* Turn GPIO clocks off */
-	CLEAR_BIT(RCC->APB2ENR,
-		LED1_CLOCK | LED2_CLOCK | DISC_CLOCK/* | RCC_APB2ENR_IOPBEN*/);
+	CLEAR_BIT(RCC->APB2ENR, LED1_CLOCK | LED2_CLOCK | DISC_CLOCK);
 
 	/* Setup the vector table to the final user-defined one in Flash
 	 * memory

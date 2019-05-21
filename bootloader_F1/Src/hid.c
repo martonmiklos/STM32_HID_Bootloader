@@ -159,18 +159,30 @@ static const uint8_t USB_LangIDStringDescriptor[] = {
 };
 
 static const uint8_t USB_VendorStringDescriptor[] = {
+#ifndef USB_VENDOR_STR_LEN
 	0x22,			// bLength
 	0x03,			// bDescriptorType (String)
 	'w', 0, 'w', 0, 'w', 0, '.', 0, 's', 0, 'e', 0, 'r', 0, 'a', 0, 's', 0,
 	'i', 0, 'd', 0, 'i', 0, 's', 0, '.', 0, 'g', 0, 'r', 0
+#else
+	USB_VENDOR_STR_LEN,	// bLength
+	0x03,			// bDescriptorType (String)
+	USB_VENDOR_MSG_STR
+#endif
 };
 
 static const uint8_t USB_ProductStringDescriptor[] = {
+#ifndef USB_PRODUCT_STR_LEN
 	0x2C,			// bLength
 	0x03,			// bDescriptorType (String)
 	'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0, 'F', 0, ' ', 0, 'H', 0, 'I', 0,
 	'D', 0, ' ', 0, 'B', 0, 'o', 0, 'o', 0, 't', 0, 'l', 0, 'o', 0, 'a', 0,
 	'd', 0, 'e', 0, 'r', 0
+#else
+	USB_PRODUCT_STR_LEN,	// bLength
+	0x03,			// bDescriptorType (String)
+	USB_PRODUCT_MSG_STR
+#endif
 };
 
 static void HIDUSB_GetDescriptor(USB_SetupPacket *setup_packet)

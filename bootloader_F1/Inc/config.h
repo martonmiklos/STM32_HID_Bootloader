@@ -133,7 +133,31 @@
 	#define DISC_MODE
 	#define DISC_HIGH		WRITE_REG(GPIOD->BSRR, GPIO_BSRR_BS2)
 	#define DISC_LOW		WRITE_REG(GPIOD->BRR, GPIO_BRR_BR2)
-  
+#elif defined TARGET_XLINEUSB
+	#define LED1_CLOCK		RCC_APB2ENR_IOPBEN
+	#define LED1_BIT_0		SET_BIT(GPIOB->CRL, GPIO_CRL_CNF5_0 | GPIO_CRL_MODE5)
+	#define LED1_BIT_1		//CLEAR_BIT(GPIOC->CRH, GPIO_CRH_CNF13_1)
+	#define LED1_MODE
+	#define LED1_OFF		WRITE_REG(GPIOB->BSRR, GPIO_BSRR_BS5)
+	#define LED1_ON			WRITE_REG(GPIOB->BRR, GPIO_BRR_BR5)
+
+	//Second LED feature is not currently used.
+	#define LED2_CLOCK		0 //RCC_APB2ENR_IOPBEN
+	#define LED2_BIT_0		//CLEAR_BIT(GPIOB->CRL, GPIO_CRL_CNF1_0)
+	#define LED2_BIT_1		//CLEAR_BIT(GPIOB->CRL, GPIO_CRL_CNF1_1)
+	#define LED2_MODE		//SET_BIT(G1PIOB->CRL, GPIO_CRL_MODE1)
+	#define LED2_ON			//WRITE_REG(GPIOB->BSRR, GPIO_BSRR_BS1)
+	#define LED2_OFF		//WRITE_REG(GPIOB->BRR, GPIO_BRR_BR1)
+
+	#define USB_VENDOR_STR_LEN 30
+	#define USB_VENDOR_MSG_STR 'D', 0, 'i', 0, 'g', 0, 'i', 0, 't', 0, 'r', 0, 'o', 0, 'l', 0, 'l', 0, ' ', 0, 'L', 0, 't', 0, 'd', 0, '.', 0
+
+	#define USB_PRODUCT_STR_LEN 42
+	#define USB_PRODUCT_MSG_STR 'X', 0, 'L', 0, 'i', 0, 'N', 0, 'E', 0, '-', 0, 'U', 0, 'S', 0, 'B', 0, ' ', 0, \
+								'b', 0, 'o', 0, 'o', 0, 't', 0, 'l', 0, 'o', 0, 'a', 0, 'd', 0, 'e', 0, 'r', 0,
+
+    #define SRAM_SIZE           (6 * 1024)
+    #define BOOTLOADER_SIZE     (3 * 1024)
 #else
 	#error "No config for this target"
 #endif
