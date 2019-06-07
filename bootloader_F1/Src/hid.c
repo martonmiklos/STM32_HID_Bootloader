@@ -21,20 +21,17 @@
 *
 */
 
-#include <stm32f10x.h>
+#include <stm32f1xx.h>
 #include <string.h>
 #include <stdbool.h>
 #include "config.h"
 #include "usb.h"
 #include "hid.h"
 #include "led.h"
-#include "flash.h"
+#include "flash_write.h"
 
 /* This should be <= MAX_EP_NUM defined in usb.h */
 #define EP_NUM 			2
-
-/* Flash memory base address */
-#define FLASH_BASE_ADDRESS	0x08000000
 
 /* This should be the last page taken by the bootloader */
 #define MIN_PAGE		(BOOTLOADER_SIZE / 1024)
@@ -282,8 +279,7 @@ static void HIDUSB_HandleData(uint8_t *data)
 		}
 	} else if (CurrentPageOffset >= PAGE_SIZE) {
 		LED1_ON;
-		page_address = (uint16_t * ) (FLASH_BASE_ADDRESS +
-			(CurrentPage * PAGE_SIZE));
+		page_address = (uint16_t * ) (FLASH_BASE + (CurrentPage * PAGE_SIZE));
 		FLASH_WritePage(page_address, (uint16_t *) PageData,
 			PAGE_SIZE / 2);
 		CurrentPage++;

@@ -25,11 +25,14 @@
 *
 */
 
-#include <stm32f10x.h>
+#include <stm32f1xx.h>
 #include <stdbool.h>
+
 #include "delay.h"
+#include "eeprom.h"
 #include "usb.h"
 #include "config.h"
+#include "flashinfo.h"
 #include "hid.h"
 #include "led.h"
 
@@ -121,7 +124,7 @@ static void set_sysclock_to_72_mhz(void)
 	/* PLLCLK = HSE * 9 = 72 MHz */
 	SET_BIT(RCC->CFGR,
 		RCC_CFGR_HPRE_DIV1 | RCC_CFGR_PPRE2_DIV1 | RCC_CFGR_PPRE1_DIV2 |
-		RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL9 | RCC_CFGR_PLLXTPRE_HSE_Div2);
+		RCC_CFGR_PLLSRC | RCC_CFGR_PLLMULL9 | RCC_CFGR_PLLXTPRE);
 
 	/* Enable PLL */
 	SET_BIT(RCC->CR, RCC_CR_PLLON);
@@ -144,6 +147,7 @@ void Reset_Handler(void)
 {
 	volatile uint32_t *const ram_vectors =
 		(volatile uint32_t *const) SRAM_BASE;
+    uint16_t stayInBootKey = 0;
 
 	/* Setup the system clock (System clock source, PLL Multiplier
 	 * factors, AHB/APBx prescalers and Flash settings)
@@ -172,19 +176,19 @@ void Reset_Handler(void)
 	UploadStarted = false;
 	UploadFinished = false;
 	funct_ptr UserProgram =
-		(funct_ptr) *(volatile uint32_t *) (USER_PROGRAM + 0x04);
+		(funct_ptr) *(volatile uint32_t *) (USER_APP_START + 0x04);
 
 	/* If:
-	 *  - PB2 (BOOT 1 pin) is HIGH or
-	 *  - no User Code is uploaded to the MCU or
-	 *  - a magic word was stored in the battery-backed RAM
-	 *    registers from the Arduino IDE
+	 *  - No User Code is uploaded to the MCU or
+	 *  - A magic word was stored in the battery-backed RAM (softreset from user app)
+	 *  - The user app marked non valid and we are not rebooting from a previous flashing procedure
 	 * then enter HID bootloader...
 	 */
-	if ((magic_word == 0x424C) ||
-		(check_user_code(USER_PROGRAM) == false)) {
+	if (((EE_ReadVariable_u16(EEKey_StayInBoot, &stayInBootKey) != EEResult_OK) && magic_word != 0x1988)
+	        || (stayInBootKey != 0x4242 && magic_word != 0x1988)
+	        || (magic_word == 0x424C)
+		    || (check_user_code(USER_APP_START) == false)) {
 		if (magic_word == 0x424C) {
-
 			/* If a magic word was stored in the
 			 * battery-backed RAM registers from the
 			 * Arduino IDE, exit from USB Serial mode and
@@ -198,6 +202,12 @@ void Reset_Handler(void)
 		while (check_flash_complete() == false) {
 			delay(512);
 		};
+
+        SET_BIT(RCC->APB1ENR, RCC_APB1ENR_BKPEN | RCC_APB1ENR_PWREN);
+        SET_BIT(PWR->CR, PWR_CR_DBP);
+        WRITE_REG(BKP->DR10, 0x1988);
+        CLEAR_BIT(PWR->CR, PWR_CR_DBP);
+        CLEAR_BIT(RCC->APB1ENR, RCC_APB1ENR_BKPEN | RCC_APB1ENR_PWREN);
 
 		/* Reset the USB */
 		USB_Shutdown();
@@ -218,10 +228,10 @@ void Reset_Handler(void)
 	/* Setup the vector table to the final user-defined one in Flash
 	 * memory
 	 */
-	WRITE_REG(SCB->VTOR, USER_PROGRAM);
+	WRITE_REG(SCB->VTOR, USER_APP_START);
 
 	/* Setup the stack pointer to the user-defined one */
-	__set_MSP((*(volatile uint32_t *) USER_PROGRAM));
+	__set_MSP((*(volatile uint32_t *) USER_APP_START));
 
 	/* Jump to the user firmware entry point */
 	UserProgram();

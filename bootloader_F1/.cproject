@@ -19,7 +19,7 @@
 							<option id="com.atollic.truestudio.toolchain_options.mcu.2028879359" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu" useByScannerDiscovery="false" value="STM32F103T6" valueType="string"/>
 							<option id="com.atollic.truestudio.toolchain_options.vendor.62946684" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor" useByScannerDiscovery="false" value="STMicroelectronics" valueType="string"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.debug.toolchain.platform.1048357827" isAbstract="false" name="Debug platform" osList="all" superClass="com.atollic.truestudio.exe.debug.toolchain.platform"/>
-							<builder buildPath="${workspace_loc:/STM32_HID_Bootloader}/Debug" customBuilderProperties="toolChainpathType=1|toolChainpathString=/opt/Atollic_TrueSTUDIO_for_STM32_x86_64_9.3.0/ARMTools/bin|" id="com.atollic.truestudio.mbs.builder1.1542278777" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="com.atollic.truestudio.mbs.builder1"/>
+							<builder buildPath="${workspace_loc:/STM32_HID_Bootloader}/Debug" customBuilderProperties="toolChainpathType=1|toolChainpathString=/opt/Atollic_TrueSTUDIO_for_STM32_x86_64_9.3.0/ARMTools/bin|" id="com.atollic.truestudio.mbs.builder1.1542278777" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.atollic.truestudio.mbs.builder1"/>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.as.716041990" name="Assembler" superClass="com.atollic.truestudio.exe.debug.toolchain.as">
 								<option id="com.atollic.truestudio.common_options.target.endianess.1219375853" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1135522175" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32F103T6" valueType="enumerated"/>
@@ -41,11 +41,15 @@
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.gcc.551196851" name="C Compiler" superClass="com.atollic.truestudio.exe.debug.toolchain.gcc">
 								<option id="com.atollic.truestudio.gcc.symbols.defined.292442031" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32F10X_LD"/>
+									<listOptionValue builtIn="false" value="RO_EEPROM"/>
+									<listOptionValue builtIn="false" value="STM32F103x6"/>
 									<listOptionValue builtIn="false" value="VECTOR_TABLE_OFFSET=0x0000 "/>
 									<listOptionValue builtIn="false" value="TARGET_XLINEUSB"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.directories.select.434442877" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../Src"/>
+									<listOptionValue builtIn="false" value="../xline_usb_common"/>
+									<listOptionValue builtIn="false" value="../stm32_eeprom_emulation"/>
 									<listOptionValue builtIn="false" value="../Inc"/>
 									<listOptionValue builtIn="false" value="../STM32F10x_StdPeriph_Driver/inc"/>
 									<listOptionValue builtIn="false" value="../CMSIS/Device/ST/STM32F10x/Include"/>
@@ -115,6 +119,8 @@
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
+						<entry excluding="flash.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="stm32_eeprom_emulation"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="xline_usb_common"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -138,7 +144,7 @@
 							<option id="com.atollic.truestudio.toolchain_options.mcu.2080242554" name="Microcontroller" superClass="com.atollic.truestudio.toolchain_options.mcu" value="STM32F103T6" valueType="string"/>
 							<option id="com.atollic.truestudio.toolchain_options.vendor.2007829517" name="Vendor name" superClass="com.atollic.truestudio.toolchain_options.vendor" value="STMicroelectronics" valueType="string"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.atollic.truestudio.exe.release.toolchain.platform.1833708428" isAbstract="false" name="release platform" superClass="com.atollic.truestudio.exe.release.toolchain.platform"/>
-							<builder buildPath="${workspace_loc:/STM32_HID_Bootloader}/Release" id="com.atollic.truestudio.mbs.builder1.42554629" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="com.atollic.truestudio.mbs.builder1"/>
+							<builder buildPath="${workspace_loc:/STM32_HID_Bootloader}/Release" customBuilderProperties="toolChainpathType=1|toolChainpathString=/opt/Atollic_TrueSTUDIO_for_STM32_x86_64_9.3.0/ARMTools/bin|" id="com.atollic.truestudio.mbs.builder1.42554629" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.atollic.truestudio.mbs.builder1"/>
 							<tool id="com.atollic.truestudio.exe.release.toolchain.as.631913651" name="Assembler" superClass="com.atollic.truestudio.exe.release.toolchain.as">
 								<option id="com.atollic.truestudio.common_options.target.endianess.41781802" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1511483765" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F103T6" valueType="enumerated"/>
@@ -160,13 +166,19 @@
 							<tool id="com.atollic.truestudio.exe.release.toolchain.gcc.1539548915" name="C Compiler" superClass="com.atollic.truestudio.exe.release.toolchain.gcc">
 								<option id="com.atollic.truestudio.gcc.symbols.defined.216321499" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32F10X_LD"/>
-									<listOptionValue builtIn="false" value="USE_STDPERIPH_DRIVER"/>
+									<listOptionValue builtIn="false" value="RO_EEPROM"/>
+									<listOptionValue builtIn="false" value="STM32F103x6"/>
+									<listOptionValue builtIn="false" value="VECTOR_TABLE_OFFSET=0x0000 "/>
+									<listOptionValue builtIn="false" value="TARGET_XLINEUSB"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.directories.select.2122113033" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" valueType="includePath">
-									<listOptionValue builtIn="false" value="../src"/>
-									<listOptionValue builtIn="false" value="../Libraries/STM32F10x_StdPeriph_Driver/inc"/>
-									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Device/ST/STM32F10x/Include"/>
-									<listOptionValue builtIn="false" value="../Libraries/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../Src"/>
+									<listOptionValue builtIn="false" value="../xline_usb_common"/>
+									<listOptionValue builtIn="false" value="../stm32_eeprom_emulation"/>
+									<listOptionValue builtIn="false" value="../Inc"/>
+									<listOptionValue builtIn="false" value="../STM32F10x_StdPeriph_Driver/inc"/>
+									<listOptionValue builtIn="false" value="../CMSIS/Device/ST/STM32F10x/Include"/>
+									<listOptionValue builtIn="false" value="../CMSIS/Include"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.1644414505" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1713312063" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F103T6" valueType="enumerated"/>
@@ -228,6 +240,8 @@
 						<entry excluding="startup_stm32f10x_md.s|startup_stm32f10x_xl.s|startup_stm32f10x_md_vl.s|startup_stm32f10x_ld.s|startup_stm32f10x_ld_vl.s|startup_stm32f10x_hd.s|startup_stm32f10x_hd_vl.s|startup_stm32f10x_cl.s" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="CMSIS/Device/ST/STM32F10x/Source/Templates/gcc"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Inc"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
+						<entry excluding="flash.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="stm32_eeprom_emulation"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="xline_usb_common"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -238,7 +252,17 @@
 		<project id="STM32_HID_Bootloader.com.atollic.truestudio.exe.168117464" name="Executable" projectType="com.atollic.truestudio.exe"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Multiple configurations">
+			<resource resourceType="PROJECT" workspacePath="/STM32_HID_Bootloader"/>
+		</configuration>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/STM32_HID_Bootloader"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/STM32_HID_Bootloader"/>
+		</configuration>
+	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>

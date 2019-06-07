@@ -1,7 +1,9 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
-#include "stm32f10x.h"
+#include "stm32f1xx.h"
+
+#include "flashinfo.h"
 
 #if defined TARGET_MAPLE_MINI
 	#define LED1_CLOCK		RCC_APB2ENR_IOPBEN
@@ -159,7 +161,6 @@
 								'b', 0, 'o', 0, 'o', 0, 't', 0, 'l', 0, 'o', 0, 'a', 0, 'd', 0, 'e', 0, 'r', 0,
 
     #define SRAM_SIZE           (6 * 1024)
-    #define BOOTLOADER_SIZE     (3 * 1024)
 #else
 	#error "No config for this target"
 #endif
@@ -233,8 +234,5 @@
 
 /* SRAM end (bottom of stack) */
 #define SRAM_END            (SRAM_BASE + SRAM_SIZE)
-
-/* HID Bootloader takes 2 kb flash. */
-#define USER_PROGRAM            (FLASH_BASE + BOOTLOADER_SIZE)
 
 #endif

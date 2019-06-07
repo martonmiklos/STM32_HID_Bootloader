@@ -1,0 +1,6 @@
+[submodule "bootloader_F1/xline_usb_common"]
+	path = bootloader_F1/xline_usb_common
+	url = git@bitbucket.org:martonmiklos/xline_usb_common.git
+[submodule "bootloader_F1/stm32_eeprom_emulation"]
+	path = bootloader_F1/stm32_eeprom_emulation
+	url = git@bitbucket.org:digitroll/stm32_eeprom_emulation.git

@@ -7,7 +7,7 @@
 
 #include "delay.h"
 
-#include "stm32f10x.h"
+#include "stm32f1xx.h"
 
 void delay(uint32_t timeout)
 {
